@@ -1,0 +1,10 @@
+Package: samplePlotR
+Type: Package
+Title: Sample plots from a cartesian space and return descriptive statistics
+Version: 0.01
+Date: 2018-05-15
+Author: Alexandre Adalardo de Oliveira and Vitor Pacielo <ecovirtualpackage@gmail.com>
+Maintainer: Vitor Pacielo <ecovirtualpackage@gmail.com>
+Description: Sample simulation from a inventory plot data
+License: Sample simulation
+RoxygenNote: 6.0.1

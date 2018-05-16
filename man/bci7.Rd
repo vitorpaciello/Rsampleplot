@@ -1,0 +1,49 @@
+\name{bci7}
+\alias{bci7}
+\docType{data}
+\title{
+Barro Colorado Forest Plot Census Data 2010
+}
+\description{
+Barro Colorado Forest Plot Census Data 2010
+}
+\usage{data("bci7")}
+\format{
+  A data frame with 207259 observations on the following 20 variables.
+  \describe{
+    \item{\code{treeID}}{a numeric vector}
+    \item{\code{stemID}}{a numeric vector}
+    \item{\code{tag}}{a character vector}
+    \item{\code{StemTag}}{a character vector}
+    \item{\code{sp}}{a character vector}
+    \item{\code{quadrat}}{a character vector}
+    \item{\code{gx}}{a numeric vector}
+    \item{\code{gy}}{a numeric vector}
+    \item{\code{MeasureID}}{a numeric vector}
+    \item{\code{CensusID}}{a numeric vector}
+    \item{\code{pom}}{a character vector}
+    \item{\code{hom}}{a numeric vector}
+    \item{\code{ExactDate}}{a character vector}
+    \item{\code{DFstatus}}{a character vector}
+    \item{\code{codes}}{a character vector}
+    \item{\code{nostems}}{a numeric vector}
+    \item{\code{status}}{a character vector}
+    \item{\code{date}}{a numeric vector}
+    \item{\code{agb}}{a array}
+    \item{\code{dbh.cm}}{a numeric vector}
+  }
+}
+\details{
+%%  ~~ If necessary, more details than the __description__ above ~~
+}
+\source{
+%%  ~~ reference to a publication or URL from which the data were obtained ~~
+}
+\references{
+%%  ~~ possibly secondary sources and usages ~~
+}
+\examples{
+data(bci7)
+## maybe str(bci7) ; plot(bci7) ...
+}
+\keyword{datasets}
