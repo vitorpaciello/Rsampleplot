@@ -23,8 +23,8 @@
 #' }
 #' @export singleStem
 #' @import dbh2barea barea2dbh
-singleStem <-
-function(plotdata, tag = "tag", dbh = "dbh",  mscale = "mm"){
+singleStem <- function(plotdata, tag = "tag", dbh = "dbh",  mscale = c("mm", "cm")){
+    mscale <- match.arg(mscale)
     #remove record with NA in dbh field 
     pd <- plotdata[!(is.na(plotdata[,dbh]) | is.na(plotdata[,tag])),]
     #subset the data (usually status or census field)
@@ -38,7 +38,7 @@ function(plotdata, tag = "tag", dbh = "dbh",  mscale = "mm"){
     basalarea <- dbh2barea(pd[,dbh], mscale)
     bareaTree <- aggregate(basalarea, list(tag = pd[,tag]), FUN = sum)
     data.cm <- pd[!duplicated(pd[, tag]), ]
-    mtag <- match(data.cm[,tag], bareaTree[,tag])
+    mtag <- match(data.cm[,tag], bareaTree[,tag])  
     data.cm[,new_namedbh] <- bareaTree[mtag, "x"]
     data.cm <- data.cm[, !(names(data.cm) %in% c(dbh, "fuste", "stem", "stemID")) ]
     return(data.cm)

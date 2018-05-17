@@ -4,7 +4,7 @@
 \alias{singleStem}
 \title{Calculate dbh for a tree with multiple stems}
 \usage{
-singleStem(plotdata, tag = "tag", dbh = "dbh", mscale = "mm")
+singleStem(plotdata, tag = "tag", dbh = "dbh", mscale = c("mm", "cm"))
 }
 \arguments{
 \item{plotdata}{a data frame with a forest plot census data.}

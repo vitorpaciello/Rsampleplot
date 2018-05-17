@@ -3,14 +3,23 @@
 \name{dbh2barea}
 \alias{dbh2barea}
 \alias{barea2dbh}
+\alias{plotCircle}
 \title{Internal function for samplePlotR package}
 \usage{
 dbh2barea(x, mscale = c("mm", "cm"))
 }
 \arguments{
-\item{x}{a numeric vector.}
+\item{x}{a numeric vector. For plot should be a x cartesian data.}
 
 \item{mscale}{a character indicating the mesured scale (mm or cm).}
+
+\item{y}{a numeric vector from a cartesian y data}
+
+\item{r}{a numeric vetor representing a radius of a circle}
+
+\item{col}{a R color indicator}
+
+\item{bg}{a R color indicator for the graphic background.}
 
 \item{statistics}{a function that calculates the statistics of interest from the dataframe.
 The first argument should be the dataframe with the data and preferably should}

@@ -24,10 +24,11 @@
 #' @export dbh2barea barea2dbh
 #' @import 
 dbh2barea <- function(x, mscale = c("mm", "cm")){
-     if(mscale == "mm"){
+    mscale <- match.arg(mscale)
+    if(mscale == "mm"){
         x <- x*0.1
     }
-    sum(pi*(x/2)^2, na.rm=TRUE)
+    pi*(x/2)^2
 }
 
 barea2dbh <- function(x){    

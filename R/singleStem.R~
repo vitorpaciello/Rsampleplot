@@ -31,8 +31,8 @@ function(plotdata, tag = "tag", dbh = "dbh",  mscale = "mm"){
     ## check if there is multiple stem trees
     if(sum(duplicated(pd[,tag])) == 0)
     {
+        cat("The data frame has no duplicated tags. Go ahead!\n")
         stop("There is no multiple stem plants. You do not need to run this function")
-        
     }
     new_namedbh <- paste(dbh,".cm", sep="")
     basalarea <- dbh2barea(pd[,dbh], mscale)
