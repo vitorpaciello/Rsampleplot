@@ -32,11 +32,15 @@ ExtractSampleIndices<- function(data, sampled_area = NA,
   results[1,1]<- sampled_area
   results$n_individuals<- nrow(data)
   results$density <- results[1,2]/sampled_area
-  results$richness <- length(unique(data[,species][!is.na(data[,species])]))
-  species_proportions <- aggregate((count = data[,species]), list(value = data[,species]), length)[2]
+  results$richness <- length(unique(data[, species][!is.na(data[, species])]))
+  species_proportions <- aggregate((count = data[, species]), list(value = data[, species]), length)[2]
   species_proportions <- species_proportions/ sum(species_proportions)
-  results$shannon <- (-1)*sum(species_proportions*log(species_proportions))
+  results$shannon <- (-1) * sum(species_proportions * log(species_proportions))
   results$simpson <- 1 - sum(species_proportions^2)
-  results$biomass <- sum(data[, biomass])
+  if (biomass %in% colnames(data)){
+    results$biomass <- sum(data[, biomass])
+  } else {
+    results$biomass <- NA
+  }
   return (results)
 }

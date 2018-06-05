@@ -4,7 +4,7 @@
 #' @param y_coords vector of x coordinates of the plots center.
 #' @param angles vector of the orientation angles of the plots center.
 #' @param shape a character string. Two shapes are possible: "rectangle" and "circle"
-#' @param size numeric vector. For ''rectangle'' the dimension of x and y  sidesand for ''circle'' the radius size.
+#' @param size numeric vector. For ''rectangle'' the dimension of x and y sides and for ''circle'' the radius size.
 #' @param distance numeric value. The minimum distance among plots
 #'
 #'
@@ -25,7 +25,8 @@
 
 CheckPlotsOverlap <- function(x_coords, y_coords, angles = NULL, 
                               shape = c("circle", "rectangle"),
-                              size = c(10,10), distance = 0){
+                              size = c(10,10), distance = 0,
+                              childfunc = FALSE){
   
   shape <- match.arg(shape)
   if (length(x_coords) != length(y_coords)){
@@ -35,10 +36,10 @@ CheckPlotsOverlap <- function(x_coords, y_coords, angles = NULL,
     cat("Angles functionality under development. All plots are assumed to have the same orientation")
   }
   if (shape == "circle"){
-    if (length(size) != 1){
-      cat("Circular plots need only the radius dimensions in size.
+    if (length(size) != 1 & !childfunc){
+          cat("Circular plots need only the radius dimensions in size.
           \rUsing only first dimension of size argument as radius \n")
-    }
+          }
     mindist <- 2*size[1] + distance
     sdist <- as.matrix( dist(cbind(x_coords,y_coords), upper=FALSE))
     sdist[upper.tri(sdist)] <- t(sdist)[upper.tri(sdist)]

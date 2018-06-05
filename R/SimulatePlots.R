@@ -1,5 +1,3 @@
-#'  
-#' 
 #' Draw n samples from data with elements in a cartesian coordinate system  
 #' 
 #'
@@ -14,13 +12,14 @@
 #' @param family character string with the name of the family variable.
 #' @param biomass character string with the name of the biomass variable.
 #' @param shape a character string. Two shapes are possible: "rectangle" and "circle"
-#' @param size numeric vector. For ''rectangle'' the dimension of x and y  sidesand for ''circle'' the radius size.
+#' @param size numeric vector. For ''rectangle'' the dimension of x and y sides and for ''circle'' the radius size.
 #' @param distance numeric value. The minimum distance among plots
 #' @param maxiter numeric value. indicating the maximum number of trails to sample units without overlaping.
 #' 
 #' @section Details:
 #' 
 #' Draw sample from elements in a cartesian coordinate system and return the subset of data in the sample.  
+#' 
 #' @return a data frame with the same columns as plotdata plus a 'sample' representing the sample unit number that the element are in. 
 #' 
 #' @section References:
@@ -29,10 +28,12 @@
 #' 
 #' \dontrun{
 #' data(bci7)
-#' plotData <- RSamplePlots(bci7, nsamples = 100, shape = "circle", size = 10)
+#' plotData <- RSamplePlots(bci7, nsamples = 100, shape = "circle", size = 10, distance =5)
 #' }
+#' 
 #' @export RSamplePlots
-#' @import plotCircle
+#' @import CheckPlotsOverlap
+#' @import ExtractSampleIndices
 
 
 SimulatePlots <- function (plotdata, nsamples, dimx = NULL, dimy = NULL,
@@ -46,10 +47,10 @@ SimulatePlots <- function (plotdata, nsamples, dimx = NULL, dimy = NULL,
   shape <- match.arg(shape)
   
   if (is.null(dimx) | is.null(dimy)){
-    dimx <- min(gx)
-    dimx[2] <- max(gx)
-    dimy <- min(gy)
-    dimy[2] <- max(gy)
+    dimx <- min(plotdata[, xname])
+    dimx[2] <- max(plotdata[, xname])
+    dimy <- min(plotdata[, yname])
+    dimy[2] <- max(plotdata[, yname])
     cat("Arena dimensions not given. Using min and max coordinates of data.\n")
   }
   
@@ -59,10 +60,11 @@ SimulatePlots <- function (plotdata, nsamples, dimx = NULL, dimy = NULL,
   for (j in 1:nsims){
     cat("\rstep", j, "of", nsims)
     for (i in nsamples:1){
-      sim <- RSamplePlot(plotdata, dimx = dimx, dimy = dimy, xname = xname,
+      sim <- RSamplePlots(plotdata, dimx = dimx, dimy = dimy, xname = xname,
                          yname = yname, shape = shape, size = size, 
-                         distance = distance, nsamples = i, maxiter = maxiter)
-      tempframe <- ExtractPlotIndices(sim$treeData, sampled_area = sim$SampledArea, 
+                         distance = distance, nsamples = i, maxiter = maxiter,
+                         childfunc = TRUE)
+      tempframe <-  ExtractSampleIndices(sim$treeData, sampled_area = sim$SampledArea, 
                                       family = family, species = species, biomass = biomass)
       results <- rbind(results, cbind(NPlots = i, tempframe))
     }

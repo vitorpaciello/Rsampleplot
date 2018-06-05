@@ -27,7 +27,7 @@
 #' }
 #' @export dbh2barea barea2dbh
 #' @import 
-dbh2barea <- function(x, mscale = c("mm", "cm")){
+dbh2barea <- function (x, mscale = c("mm", "cm")){
     mscale <- match.arg(mscale)
     if(mscale == "mm"){
         x <- x*0.1
@@ -35,12 +35,12 @@ dbh2barea <- function(x, mscale = c("mm", "cm")){
     pi*(x/2)^2
 }
 
-barea2dbh <- function(x){    
+barea2dbh <- function (x){    
         round((4* x/pi)^(1/2), 2)
 }
 ############################
 ## Function to draw a circle
-plotCircle <- Vectorize(function(x, y, r, col = 1, bg = NA) {
+PlotSampleCircle <- Vectorize (function (x, y, r, col = 1, bg = NA) {
     ang <- seq(0,2*pi,length.out=360)
     lines(r*cos(ang)+x,r*sin(ang)+y, col = 1)
     polygon(r*cos(ang)+x, r*sin(ang)+y, col = bg)
