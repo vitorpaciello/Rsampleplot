@@ -37,7 +37,7 @@ RSamplePlots <- function(plotdata, nsamples,
                         dimx = NULL, dimy = NULL,
                         xname = "gx", yname = "gy",  
                         shape = c("rectangle", "circle"),  
-                        size = c(5,5),  distance = 0, 
+                        size = NULL,  distance = 0, 
                         showplots = FALSE, maxiter = 10^5){
   
   shape <- match.arg(shape)

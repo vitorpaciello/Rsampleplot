@@ -41,7 +41,7 @@ SimulatePlots <- function (plotdata, nsamples, dimx = NULL, dimy = NULL,
                            species = "species", family = "family", 
                            biomass = "biomass",
                            shape = c( "rectangle", "circle"), 
-                           size = c(5,5), distance = 0,
+                           size = NULL, distance = 0,
                            maxiter = 10^5){
   
   shape <- match.arg(shape)
