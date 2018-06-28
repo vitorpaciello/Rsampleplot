@@ -28,30 +28,37 @@ CheckPlotsOverlap <- function(x_coords, y_coords, angles = NULL,
                               size = c(10,10), distance = 0,
                               childfunc = FALSE){
   
-  shape <- match.arg(shape)
-  if (length(x_coords) != length(y_coords)){
-    stop("Coordinate vectors should have same length")
-  }
-  if (!is.null(angles)){
-    cat("Angles functionality under development. All plots are assumed to have the same orientation")
+  
+  if (!childfunc){
+    shape <- match.arg(shape)
+    if (length(x_coords) != length(y_coords)){
+      stop("Coordinate vectors should have same length.")
+    }
+    if (!is.null(angles)){
+      cat("Angles functionality under development. All plots are assumed to have the same orientation.\n")
+    }
+    if (shape == "circle"){
+      if (length(size) != 1){
+        cat("Circular plots need only the radius dimensions in size.
+            \rUsing only first dimension of size argument as radius \n")
+      }
+    }
+    if (shape == "rectangle"){
+      if (length(size) != 2 | size[1] < 0 | size[2] < 0){
+        stop("Retangular plots need two positive dimensions.")
+      }
+    }
   }
   if (shape == "circle"){
-    if (length(size) != 1 & !childfunc){
-          cat("Circular plots need only the radius dimensions in size.
-          \rUsing only first dimension of size argument as radius \n")
-          }
     mindist <- 2*size[1] + distance
     sdist <- as.matrix( dist(cbind(x_coords,y_coords), upper=FALSE))
     sdist[upper.tri(sdist)] <- t(sdist)[upper.tri(sdist)]
     diag(sdist) <- mindist +1
     output <- apply(sdist, 1, function(x){
-      which(x < mindist,arr.ind=TRUE)})
-    
-    }
+                    which(x < mindist,arr.ind=TRUE)})
+    return(output)
+  }
   if (shape == "rectangle"){
-    if (length(size) != 2 | size[1] < 0 | size[2] < 0){
-      stop("Retangular plots need two positive dimensions.")
-    }
     mindist_x <- size[1] + distance
     mindist_y <- size[2] + distance
     mxcoords <- matrix(x_coords, nrow = length(x_coords), ncol = length(x_coords))
@@ -63,7 +70,7 @@ CheckPlotsOverlap <- function(x_coords, y_coords, angles = NULL,
     diag(comparedist) <- 0
     comparedist[mdistx > 0] <- 0
     output <- apply(comparedist, 1, function(x){
-      which(x > 0,arr.ind=TRUE)})
+                    which(x > 0,arr.ind=TRUE)})
   }
   return (output)
 }

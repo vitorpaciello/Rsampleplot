@@ -53,22 +53,81 @@ SimulatePlots <- function (plotdata, nsamples, dimx = NULL, dimy = NULL,
     dimy[2] <- max(plotdata[, yname])
     cat("Arena dimensions not given. Using min and max coordinates of data.\n")
   }
+  if (shape == "rectangle"){
+    if (length(size) != 2 | size[1] > dimx[2] | size[2] > dimy[2]){
+      stop("Retangular sample needs two dimensions smallers then plot size.")
+    }
+    halfs <- size/2
+  }
+  if (shape == "circle"){
+    if (length(size) != 1){
+      cat("Circular sample needs only the radius dimensions in size.
+          \rUsing only first dimension of size argument as radius \n")
+    }
+    if (size[1] >= (dimx[2]/2) | size[1] > (dimy[2]/2)){
+      stop("Sample units should be smaller than plot size")
+    }
+    size[2] <- size[1] 
+    halfs <- size
+    }
   
   results <- data.frame (matrix(, nrow= 0 , ncol = 8))
   colnames(results) <- c("NPlots", "SampledArea", "NIndividuals", "Density", "Richness", "Shannon", "Simpson", "Biomass")
   
   for (j in 1:nsims){
-    cat("\rstep", j, "of", nsims)
+    cat("\rSimulation", j, "of", nsims)
     for (i in nsamples:1){
-      sim <- RSamplePlots(plotdata, dimx = dimx, dimy = dimy, xname = xname,
-                         yname = yname, shape = shape, size = size, 
-                         distance = distance, nsamples = i, maxiter = maxiter,
-                         childfunc = TRUE)
-      tempframe <-  ExtractSampleIndices(sim$treeData, sampled_area = sim$SampledArea, 
-                                      family = family, species = species, biomass = biomass)
+      
+      plotdata$sample <- NA
+      xs <-  sample(seq(dimx[1] + halfs[1], dimx[2] - halfs[1]) ,i)
+      ys <-  sample(seq(dimy[1] + halfs[2], dimy[2] - halfs[2]) ,i)
+      iover <- CheckPlotsOverlap(xs,ys, shape = shape, size = size, 
+                                 distance = distance, childfunc = TRUE)
+      nover <- sapply(iover, length)
+      sover <- which(nover > 0)
+      nsover <- length(sover)
+      niter <- 1  
+      
+      while (nsover > 0){
+        newx <- sample(seq(dimx[1] + halfs[1], dimx[2] - halfs[1]) ,nsover)
+        newy <- sample(seq(dimy[1] + halfs[2], dimy[2] - halfs[2]) ,nsover)
+        xs[sover] <- newx
+        ys[sover] <- newy
+        iover <- CheckPlotsOverlap(xs,ys, shape = shape, size = size, 
+                                   distance = distance, childfunc = TRUE)
+        iover <- lapply(seq_along(iover), function(i){ iover[[i]]<i})
+        nover <- sapply(iover, sum)
+        sover <- which(nover > 0)
+        nsover <- length(sover)
+        niter <- niter + 1
+        if (niter > maxiter){
+          stop ("\rIt is very hard to place random samples without overlap. 
+                \rPlease try smaller sample or increase maximum iteration (maxiter) number")
+        }
+        }
+      
+      sampTree <- rep(NA, nrow(plotdata))
+      if (shape=="rectangle"){
+        for (k in 1:i){
+          sampTree[plotdata[, xname] >= xs[k] - halfs[1] & plotdata[, xname] < xs[k] + halfs[1] &
+                     plotdata[, yname] >= ys[k] - halfs[2] & plotdata[, yname] < ys[k] + halfs[2]] <- i
+        }
+        sampledarea <- size[1]*size[2]*i
+      }
+      if (shape=="circle"){
+        for (k in 1:i){
+          sampTree[((plotdata[, xname] - xs[k])^2 + (plotdata[, yname] - ys[k])^2) < size[1]^2] <- i
+        }
+        sampledarea <- size[1]*size[1]*pi*i
+      }
+      plotdata$sample <- sampTree
+      newdata <- plotdata[!is.na(sampTree),]
+      
+      tempframe <-  ExtractSampleIndices(newdata, sampled_area = sampledarea, 
+                                         family = family, species = species, biomass = biomass)
       results <- rbind(results, cbind(NPlots = i, tempframe))
-    }
+      }
   }
-  cat("\rSimulation completed\n")
+  cat("\rSimulation completed                    \n")
   return(results)
-}
+  }

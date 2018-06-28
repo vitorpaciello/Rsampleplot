@@ -38,21 +38,16 @@ RSamplePlots <- function(plotdata, nsamples,
                         xname = "gx", yname = "gy",  
                         shape = c("rectangle", "circle"),  
                         size = c(5,5),  distance = 0, 
-                        showplots = FALSE, maxiter = 10^5,
-                        childfunc = FALSE){
+                        showplots = FALSE, maxiter = 10^5){
   
   shape <- match.arg(shape)
-  
   if (is.null(dimx) | is.null(dimy)){
     dimx <- min(plotdata[, xname])
     dimx[2] <- max(plotdata[, xname])
     dimy <- min(plotdata[, yname])
     dimy[2] <- max(plotdata[, yname])
-    if (!childfunc){
-      cat("Arena dimensions not given. Using min and max coordinates of data.\n")
-    }
+    cat("Arena dimensions not given. Using min and max coordinates of data.\n")
   }
-  
   if (shape == "rectangle"){
     if (length(size) != 2 | size[1] > dimx[2] | size[2] > dimy[2]){
       stop("Retangular sample needs two dimensions smallers then plot size.")
@@ -61,10 +56,8 @@ RSamplePlots <- function(plotdata, nsamples,
   }
   if (shape == "circle"){
     if (length(size) != 1){
-      if (!childfunc){
           cat("Circular sample needs only the radius dimensions in size.
           \rUsing only first dimension of size argument as radius \n")
-      }
       size <- size[1]    
     }
     if (size[1] >= (dimx[2]/2) | size[1] > (dimy[2]/2)){
@@ -74,6 +67,7 @@ RSamplePlots <- function(plotdata, nsamples,
     halfs <- size
     
   }
+  
   xs <-  sample(seq(dimx[1] + halfs[1], dimx[2] - halfs[1]) ,nsamples)
   ys <-  sample(seq(dimy[1] + halfs[2], dimy[2] - halfs[2]) ,nsamples)
   iover <- CheckPlotsOverlap(xs,ys, shape = shape, size = size, 
