@@ -120,12 +120,15 @@ SimulatePlots <- function (plotdata, nsamples, dimx = NULL, dimy = NULL,
         }
         sampledarea <- size[1]*size[1]*pi*i
       }
+      
       plotdata$sample <- sampTree
       newdata <- plotdata[!is.na(sampTree),]
       
-      tempframe <-  ExtractSampleIndices(newdata, sampled_area = sampledarea, 
-                                         family = family, species = species, biomass = biomass)
-      results <- rbind(results, cbind(NPlots = i, tempframe))
+      if(nrow(newdata) > 0 ){
+        tempframe <-  ExtractSampleIndices(newdata, sampled_area = sampledarea, 
+                                           family = family, species = species, biomass = biomass)
+        results <- rbind(results, cbind(NPlots = i, tempframe))
+      }
       }
   }
   cat("\rSimulation completed                    \n")

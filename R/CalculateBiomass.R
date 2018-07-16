@@ -89,6 +89,6 @@ CalculateBiomass <- function(plotdata, method = c("chave", "tiepolo", "burgdeli"
            }
          },
          cat("Method  '", method, "'  not found\n"))
-  plotdata[!is.na(plotdata$biomass), "biomass"] <- mean(plotdata[!is.na(plotdata$biomass), "biomass"])
+  plotdata[is.na(plotdata$biomass), "biomass"] <- mean(plotdata[!is.na(plotdata$biomass), "biomass"])
   return(plotdata)
 }
